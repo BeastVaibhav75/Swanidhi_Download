@@ -74,19 +74,44 @@ const menuToggle = document.querySelector('.menu-toggle');
 const navLinks = document.querySelector('.nav-links');
 
 menuToggle.addEventListener('click', () => {
+    menuToggle.classList.toggle('active');
     navLinks.classList.toggle('active');
+    document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
 });
 
 // Close mobile menu when clicking outside
 document.addEventListener('click', (e) => {
     if (!menuToggle.contains(e.target) && !navLinks.contains(e.target)) {
+        menuToggle.classList.remove('active');
         navLinks.classList.remove('active');
+        document.body.style.overflow = '';
     }
 });
 
 // Close mobile menu when clicking a link
 document.querySelectorAll('.nav-links a').forEach(link => {
     link.addEventListener('click', () => {
+        menuToggle.classList.remove('active');
         navLinks.classList.remove('active');
+        document.body.style.overflow = '';
     });
-}); 
+});
+
+// Add scroll animation for elements
+const animateOnScroll = () => {
+    const elements = document.querySelectorAll('.feature-card, .contact-item, .hero-content, .hero-image');
+    
+    elements.forEach(element => {
+        const elementTop = element.getBoundingClientRect().top;
+        const elementBottom = element.getBoundingClientRect().bottom;
+        
+        if (elementTop < window.innerHeight && elementBottom > 0) {
+            element.style.opacity = '1';
+            element.style.transform = 'translateY(0)';
+        }
+    });
+};
+
+// Initial check for elements in view
+window.addEventListener('load', animateOnScroll);
+window.addEventListener('scroll', animateOnScroll); 
